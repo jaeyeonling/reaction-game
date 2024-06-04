@@ -1,0 +1,78 @@
+### Create Admin Player
+POST {{host}}/players HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+{
+  "name": "ADMIN",
+  "admin": true
+}
+
+### Create Player
+POST {{host}}/players HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+{
+  "name": "PLAYER",
+  "admin": false
+}
+
+### Get Players
+GET {{host}}/players HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+### Delete Player
+< {%
+    request.variables.set("playerId", "1")
+%}
+DELETE {{host}}/players/{{playerId}} HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+### Create Session
+< {%
+    const now = new Date();
+    request.variables.set("startDate", now.toISOString())
+    request.variables.set("endDate", new Date(now.getTime() + 1000 * 60 * 10).toISOString())
+%}
+POST {{host}}/sessions HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+{
+    "title": "Test Session2",
+    "startDate": "{{startDate}}",
+    "endDate": "{{endDate}}"
+}
+
+### Get Sessions
+GET {{host}}/sessions HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+### Get Session
+< {%
+    request.variables.set("sessionId", "1")
+%}
+GET {{host}}/sessions/{{sessionId}} HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+### Delete Session
+< {%
+    request.variables.set("sessionId", "1")
+%}
+DELETE {{host}}/sessions/{{sessionId}} HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
+### Get Session Status
+< {%
+    request.variables.set("sessionId", "1")
+%}
+GET {{host}}/sessions/{{sessionId}}/status HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
