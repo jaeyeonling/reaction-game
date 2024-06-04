@@ -8,6 +8,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.UniqueConstraint;
 import org.slf4j.Logger;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.ALREADY_REACTED;
 
 @Embeddable
 public class Reactions {
@@ -42,8 +44,7 @@ public class Reactions {
 
     public void add(final Reaction reaction) {
         if (alreadyReacted(reaction)) {
-            log.debug("Already reacted [reaction={}]", reaction);
-            return;
+            throw new ReactionGameException(ALREADY_REACTED);
         }
         reactions.add(reaction);
     }

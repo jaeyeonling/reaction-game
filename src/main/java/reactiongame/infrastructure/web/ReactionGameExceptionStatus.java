@@ -33,7 +33,9 @@ public enum ReactionGameExceptionStatus {
     SESSION_NOT_AVAILABLE(-202, HttpStatus.BAD_REQUEST),
     SESSION_NOT_SETTLED(-203, HttpStatus.BAD_REQUEST),
     SESSION_PLAYER_NOT_FOUND(-204, HttpStatus.NOT_FOUND),
-    PLAYER_NOT_FOUND(-205, HttpStatus.NOT_FOUND);
+    PLAYER_NOT_FOUND(-205, HttpStatus.NOT_FOUND),
+    ALREADY_REACTED(-206, HttpStatus.BAD_REQUEST),
+    ;
 
     private final int code;
 

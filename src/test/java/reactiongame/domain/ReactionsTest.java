@@ -3,10 +3,13 @@ package reactiongame.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.ALREADY_REACTED;
 
 class ReactionsTest {
 
@@ -17,15 +20,20 @@ class ReactionsTest {
         reactions = new Reactions();
     }
 
-    @DisplayName("같은 기준 시간을 가진 반응을 추가하면 무시된다.")
+    @DisplayName("같은 기준 시간을 가진 반응을 추가하면 예외가 발생한다.")
     @Test
     void add_alreadyReacted() {
         final var reaction = new Reaction(LocalDateTime.now());
         reactions.add(reaction);
 
-        reactions.add(reaction);
+        final var reactionGameException = catchThrowableOfType(
+                () -> reactions.add(reaction),
+                ReactionGameException.class
+        );
 
-        assertThat(reactions.toList()).hasSize(1);
+        assertThat(reactionGameException).isNotNull()
+                .extracting("status")
+                .isEqualTo(ALREADY_REACTED);
     }
 
     @DisplayName("기준 시간으로 반응을 찾을 수 있다.")
