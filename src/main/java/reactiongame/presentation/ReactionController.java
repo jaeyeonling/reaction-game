@@ -13,7 +13,7 @@ import reactiongame.infrastructure.security.Secured;
 import java.util.List;
 
 @RestController
-public final class ReactionController {
+public class ReactionController {
 
     private final ReactionService reactionService;
 

@@ -15,7 +15,7 @@ import reactiongame.infrastructure.security.Secured;
 import java.util.List;
 
 @RestController
-public final class PlayerController {
+public class PlayerController {
 
     private final PlayerService playerService;
 

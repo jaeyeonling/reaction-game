@@ -21,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-public final class SessionController {
+public class SessionController {
 
     private final SessionService sessionService;
 
