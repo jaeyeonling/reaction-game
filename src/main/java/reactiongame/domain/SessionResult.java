@@ -7,4 +7,9 @@ public record SessionResult(
         List<SessionPlayerRanking> playerRankings
 ) {
 
+    public List<Long> playerIds() {
+        return playerRankings.stream()
+                .map(SessionPlayerRanking::playerId)
+                .toList();
+    }
 }

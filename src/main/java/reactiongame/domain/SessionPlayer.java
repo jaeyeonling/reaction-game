@@ -55,14 +55,6 @@ public class SessionPlayer extends CreateDateAuditable {
         return reaction;
     }
 
-    public Long sessionId() {
-        return sessionId;
-    }
-
-    public Long playerId() {
-        return playerId;
-    }
-
     public List<ReactionHistory> reactions() {
         return reactions.toList()
                 .stream()
@@ -72,6 +64,14 @@ public class SessionPlayer extends CreateDateAuditable {
 
     public Optional<Reaction> findReactionByBaseTime(final ReactionBaseTime baseTime) {
         return reactions.findReactionByBaseTime(baseTime);
+    }
+
+    public Long sessionId() {
+        return sessionId;
+    }
+
+    public Long playerId() {
+        return playerId;
     }
 
     @Override

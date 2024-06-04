@@ -24,4 +24,10 @@ public record SessionStatus(
                 playerRankings -> new SessionResult(sessionId, playerRankings)
         ));
     }
+
+    public List<Long> playerIds() {
+        return playerStatuses.stream()
+                .map(SessionPlayerStatus::playerId)
+                .toList();
+    }
 }

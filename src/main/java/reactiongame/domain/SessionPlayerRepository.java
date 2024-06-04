@@ -25,6 +25,9 @@ public interface SessionPlayerRepository extends Repository<SessionPlayer, Long>
     List<SessionPlayer> findAllBySessionId(long sessionId);
 
     @Transactional(readOnly = true)
+    List<SessionPlayer> findAllByPlayerIdIn(List<Long> playerIds);
+
+    @Transactional(readOnly = true)
     default SessionPlayer getById(final long id) {
         return findById(id).orElseThrow(() -> new ReactionGameException(SESSION_PLAYER_NOT_FOUND));
     }

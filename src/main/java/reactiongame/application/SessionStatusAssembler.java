@@ -28,12 +28,8 @@ public class SessionStatusAssembler {
 
     @Transactional(readOnly = true)
     public SessionStatusResponse toResponse(final SessionStatus sessionStatus) {
-        final var playerIds = sessionStatus.playerStatuses()
-                .stream()
-                .map(SessionPlayerStatus::playerId).toList();
-
         final var session = sessionRepository.getById(sessionStatus.sessionId());
-        final var idToPlayer = playerRepository.findSimpleMapEachById(playerIds);
+        final var idToPlayer = playerRepository.findSimpleMapEachById(sessionStatus.playerIds());
 
         return new SessionStatusResponse(
                 session.id(),
