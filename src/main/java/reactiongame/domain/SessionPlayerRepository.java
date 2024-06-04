@@ -2,10 +2,12 @@ package reactiongame.domain;
 
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.SESSION_PLAYER_NOT_FOUND;
 
 @org.springframework.stereotype.Repository
 public interface SessionPlayerRepository extends Repository<SessionPlayer, Long> {
@@ -24,7 +26,7 @@ public interface SessionPlayerRepository extends Repository<SessionPlayer, Long>
 
     @Transactional(readOnly = true)
     default SessionPlayer getById(final long id) {
-        return findById(id).orElseThrow(() -> new NoSuchElementException("SessionPlayer not found"));
+        return findById(id).orElseThrow(() -> new ReactionGameException(SESSION_PLAYER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -33,7 +35,7 @@ public interface SessionPlayerRepository extends Repository<SessionPlayer, Long>
             final long playerId
     ) {
         return findBySessionIdAndPlayerId(sessionId, playerId)
-                .orElseThrow(() -> new NoSuchElementException("SessionPlayer not found"));
+                .orElseThrow(() -> new ReactionGameException(SESSION_PLAYER_NOT_FOUND));
     }
 
     @Transactional

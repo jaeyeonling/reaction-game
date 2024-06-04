@@ -24,12 +24,14 @@ import java.util.function.Function;
 @Component
 public final class ControllerLoggingAspect {
 
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)"
-            + " || @annotation(org.springframework.web.bind.annotation.GetMapping)"
-            + " || @annotation(org.springframework.web.bind.annotation.PostMapping)"
-            + " || @annotation(org.springframework.web.bind.annotation.PatchMapping)"
-            + " || @annotation(org.springframework.web.bind.annotation.PutMapping)"
-            + " || @annotation(org.springframework.web.bind.annotation.DeleteMapping)")
+    @Pointcut("""
+            @annotation(org.springframework.web.bind.annotation.RequestMapping)
+             || @annotation(org.springframework.web.bind.annotation.GetMapping)
+             || @annotation(org.springframework.web.bind.annotation.PostMapping)
+             || @annotation(org.springframework.web.bind.annotation.PatchMapping)
+             || @annotation(org.springframework.web.bind.annotation.PutMapping)
+             || @annotation(org.springframework.web.bind.annotation.DeleteMapping)
+            """)
     void loggingPointcut() {
     }
 

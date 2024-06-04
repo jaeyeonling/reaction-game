@@ -9,8 +9,10 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import static java.util.Objects.requireNonNull;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.INVALID_ACCESS_TOKEN;
 import static reactiongame.infrastructure.security.PlayerTokenBaseAccessToken.ACCESS_TOKEN_ATTRIBUTE_NAME;
 
 @Component
@@ -43,11 +45,11 @@ public final class PlayerTokenBaseAccessTokenArgumentResolver implements Handler
         final var accessToken = (AccessToken) webRequest.getAttribute(ACCESS_TOKEN_ATTRIBUTE_NAME, NativeWebRequest.SCOPE_REQUEST);
 
         if (accessToken == null) {
-            if (bindAccessToken.require()) {
-                throw new IllegalArgumentException("Access token is invalid.");
-            }
-
             log.debug("Access token not found");
+
+            if (bindAccessToken.require()) {
+                throw new ReactionGameException(INVALID_ACCESS_TOKEN);
+            }
             return null;
         }
 

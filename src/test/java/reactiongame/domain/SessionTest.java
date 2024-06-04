@@ -3,14 +3,17 @@ package reactiongame.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.SESSION_NOT_AVAILABLE;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.SESSION_NOT_SETTLED;
 import static reactiongame.support.LocalDateTimes.convertMillisToNano;
 
 class SessionTest {
@@ -38,27 +41,27 @@ class SessionTest {
     @DisplayName("세션이 시작되기 전 반응은 추가할 수 없다.")
     @Test
     void react_notStarted() {
-        assertThatThrownBy(() -> {
-            session.react(
-                    sessionPlayer,
-                    baseTime.minusNanos(1)
-            );
-        })
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Session is not available");
+        final var reactionGameException = catchThrowableOfType(() -> session.react(
+                sessionPlayer,
+                baseTime.minusNanos(1)
+        ), ReactionGameException.class);
+
+        assertThat(reactionGameException).isNotNull()
+                .extracting("status")
+                .isEqualTo(SESSION_NOT_AVAILABLE);
     }
 
     @DisplayName("세션이 끝난 후 반응은 추가할 수 없다.")
     @Test
     void react_finished() {
-        assertThatThrownBy(() -> {
-            session.react(
-                    sessionPlayer,
-                    endTime.plusNanos(1)
-            );
-        })
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Session is not available");
+        final var reactionGameException = catchThrowableOfType(() -> session.react(
+                sessionPlayer,
+                endTime.plusNanos(1)
+        ), ReactionGameException.class);
+
+        assertThat(reactionGameException).isNotNull()
+                .extracting("status")
+                .isEqualTo(SESSION_NOT_AVAILABLE);
     }
 
     @DisplayName("게임 시작 후 반응하지 않았을 경우 플레이어 상태를 생성한다.")
@@ -116,25 +119,23 @@ class SessionTest {
     @DisplayName("게임이 끝나지 않은 경우 결과를 생성할 수 없다.")
     @Test
     void createSessionResult_notFinished() {
-        assertThatThrownBy(() -> {
-            session.createSessionResult(
-                    List.of(),
-                    baseTime.minusNanos(1)
-            );
-        })
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Session is not settled");
+        final var reactionGameException = catchThrowableOfType(() -> session.createSessionResult(
+                List.of(),
+                baseTime.minusNanos(1)
+        ), ReactionGameException.class);
+
+        assertThat(reactionGameException).isNotNull()
+                .extracting("status")
+                .isEqualTo(SESSION_NOT_SETTLED);
     }
 
     @DisplayName("게임 정산이 끝나면 결과를 생성할 수 있다.")
     @Test
     void createSessionResult() {
-        assertThatCode(() -> {
-            session.createSessionResult(
-                    List.of(),
-                    endTime
-            );
-        }).doesNotThrowAnyException();
+        assertThatCode(() -> session.createSessionResult(
+                List.of(),
+                endTime
+        )).doesNotThrowAnyException();
     }
 
     @DisplayName("게임 참여자가 없을 때 결과를 생성할 수 있다.")

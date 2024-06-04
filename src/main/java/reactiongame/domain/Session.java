@@ -6,11 +6,15 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import reactiongame.infrastructure.web.ReactionGameException;
 import reactiongame.infrastructure.persistence.CreateDateAuditable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.SESSION_NOT_AVAILABLE;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.SESSION_NOT_SETTLED;
 
 @Table(
         uniqueConstraints = {
@@ -65,7 +69,7 @@ public class Session extends CreateDateAuditable {
 
     private void checkAvailableTime(final LocalDateTime requestAt) {
         if (notStarted(requestAt) || finished(requestAt)) {
-            throw new IllegalArgumentException("Session is not available");
+            throw new ReactionGameException(SESSION_NOT_AVAILABLE);
         }
     }
 
@@ -142,7 +146,7 @@ public class Session extends CreateDateAuditable {
             final LocalDateTime requestAt
     ) {
         if (!finished(requestAt)) {
-            throw new IllegalStateException("Session is not settled");
+            throw new ReactionGameException(SESSION_NOT_SETTLED);
         }
 
         final var sessionStatus = createSessionStatus(sessionPlayers);

@@ -8,6 +8,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import reactiongame.infrastructure.web.ReactionGameException;
+
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.FORBIDDEN;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.INVALID_ACCESS_TOKEN;
 
 @Component
 public final class PlayerTokenBaseSecureInterceptor implements HandlerInterceptor {
@@ -26,16 +30,16 @@ public final class PlayerTokenBaseSecureInterceptor implements HandlerIntercepto
         }
         final var secured = handlerMethod.getMethodAnnotation(Secured.class);
         if (secured == null) {
-            log.debug("Handler is not a secured method [handler={}]", handler);
+            log.warn("Handler is not a secured method [handler={}]", handler);
             return true;
         }
 
         final var accessToken = (AccessToken) request.getAttribute(PlayerTokenBaseAccessToken.ACCESS_TOKEN_ATTRIBUTE_NAME);
         if (accessToken == null) {
-            throw new IllegalStateException("Access token is required");
+            throw new ReactionGameException(INVALID_ACCESS_TOKEN);
         }
         if (secured.admin() && !accessToken.admin()) {
-            throw new IllegalStateException("Admin access token is required");
+            throw new ReactionGameException(FORBIDDEN);
         }
 
         log.debug("Access token is valid [accessToken={}]", accessToken);

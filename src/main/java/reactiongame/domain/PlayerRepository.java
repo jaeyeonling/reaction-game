@@ -2,14 +2,15 @@ package reactiongame.domain;
 
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toUnmodifiableMap;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.PLAYER_NOT_FOUND;
 
 @org.springframework.stereotype.Repository
 public interface PlayerRepository extends Repository<Player, Long> {
@@ -37,7 +38,7 @@ public interface PlayerRepository extends Repository<Player, Long> {
 
     @Transactional(readOnly = true)
     default Player getById(final long id) {
-        return findById(id).orElseThrow(() -> new NoSuchElementException("Player not found"));
+        return findById(id).orElseThrow(() -> new ReactionGameException(PLAYER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

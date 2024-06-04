@@ -2,10 +2,12 @@ package reactiongame.domain;
 
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.SESSION_NOT_FOUND;
 
 @org.springframework.stereotype.Repository
 public interface SessionRepository extends Repository<Session, Long> {
@@ -24,6 +26,6 @@ public interface SessionRepository extends Repository<Session, Long> {
 
     @Transactional(readOnly = true)
     default Session getById(final long id) {
-        return findById(id).orElseThrow(() -> new NoSuchElementException("Session not found"));
+        return findById(id).orElseThrow(() -> new ReactionGameException(SESSION_NOT_FOUND));
     }
 }
