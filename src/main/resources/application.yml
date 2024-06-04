@@ -1,0 +1,23 @@
+logging:
+  level:
+    root: INFO
+    reactiongame: DEBUG
+
+spring:
+  application.name: reaction-game
+  jpa.open-in-view: false
+  datasource:
+    hikari:
+      pool-name: reaction-dbcp
+      minimum-idle: 11
+      maximum-pool-size: 21
+      auto-commit: false
+      max-lifetime: 1_800_000
+      idle-timeout: 30_000
+      connection-timeout: 10_000
+
+server:
+  port: 80
+  error:
+    include-exception: false
+    whitelabel.enabled: false

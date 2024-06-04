@@ -1,0 +1,13 @@
+== 반응 API
+
+=== 반응 추가
+
+operation::reactions/create[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']
+
+=== 반응 목록 조회
+
+operation::reactions/list[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']
+
+=== 내 반응 목록 조회
+
+operation::reactions/mine[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']

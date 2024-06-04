@@ -1,0 +1,4 @@
+logging.level:
+  root: INFO
+  reactiongame: DEBUG
+  org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -1,0 +1,10 @@
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= Reaction Game 문서
+
+include::reactions.adoc[]
+include::sessions.adoc[]

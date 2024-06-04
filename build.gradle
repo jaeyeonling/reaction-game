@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+group = 'jaeyeonling'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+
+    asciidoctorExtensions
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('javaVersion', JavaVersion.VERSION_21)
+    set('snippetsDir', file('build/generated-snippets'))
+}
+
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
+dependencies {
+    runtimeOnly 'com.h2database:h2'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    implementation 'org.slf4j:slf4j-api'
+    implementation 'org.slf4j:jcl-over-slf4j'
+
+    implementation 'com.mysql:mysql-connector-j'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+}
+
+springBoot {
+    mainClass = 'reactiongame.Application'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+    dependsOn test
+    baseDirFollowsSourceFile()
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from(asciidoctor.outputDir) {
+        into 'static/docs'
+    }
+}
