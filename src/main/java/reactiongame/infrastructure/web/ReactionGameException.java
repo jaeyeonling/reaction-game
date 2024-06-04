@@ -14,7 +14,7 @@ public final class ReactionGameException extends RuntimeException {
             final ReactionGameExceptionStatus status,
             final Throwable cause
     ) {
-        super(cause);
+        super(status.name(), cause);
 
         this.status = status;
     }

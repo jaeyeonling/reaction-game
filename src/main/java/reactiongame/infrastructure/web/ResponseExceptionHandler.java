@@ -22,6 +22,7 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -54,6 +55,12 @@ public final class ResponseExceptionHandler extends ResponseEntityExceptionHandl
 
 
     private static final Logger log = LoggerFactory.getLogger(ResponseExceptionHandler.class);
+
+    @ExceptionHandler(ReactionGameException.class)
+    public ResponseEntity<Object> reactionGameException(final ReactionGameException e) {
+        log.debug("Reaction Game exception [status={}]", e.status());
+        return createResponse(e.status());
+    }
 
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
