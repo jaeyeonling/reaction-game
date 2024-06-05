@@ -1,5 +1,9 @@
 == 세션 API
 
+=== 세션 조회
+
+operation::sessions/find-by-id[snippets='curl-request,http-request,http-response,response-body,response-fields']
+
 === 내 상태 조회
 
 operation::sessions/my-status[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']

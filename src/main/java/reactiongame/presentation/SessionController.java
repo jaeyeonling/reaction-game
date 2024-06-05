@@ -46,12 +46,6 @@ public class SessionController {
     }
 
     @Secured(admin = true)
-    @GetMapping("/sessions/{sessionId}")
-    SessionResponse findById(@PathVariable final long sessionId) {
-        return sessionService.findById(sessionId);
-    }
-
-    @Secured(admin = true)
     @DeleteMapping("/sessions/{sessionId}")
     ResponseEntity<Void> delete(@PathVariable final long sessionId) {
         sessionService.delete(sessionId);
@@ -62,6 +56,11 @@ public class SessionController {
     @GetMapping("/sessions/{sessionId}/status")
     SessionStatusResponse sessionStatus(@PathVariable final long sessionId) {
         return sessionService.findSessionStatus(sessionId);
+    }
+
+    @GetMapping("/sessions/{sessionId}")
+    SessionResponse findById(@PathVariable final long sessionId) {
+        return sessionService.findById(sessionId);
     }
 
     @Secured

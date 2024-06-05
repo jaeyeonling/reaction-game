@@ -7,6 +7,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import reactiongame.application.ScoreItemResponse;
 import reactiongame.application.SessionPlayerStatusResponse;
+import reactiongame.application.SessionResponse;
 import reactiongame.application.SessionResultResponse;
 import reactiongame.application.SessionService;
 import reactiongame.domain.Reaction;
@@ -37,6 +38,33 @@ final class SessionDocumentTest extends AbstractDocumentTest {
 
     @MockBean
     private SessionService sessionService;
+
+    @DisplayName("세션을 조회한다.")
+    @Test
+    void findById() throws Exception {
+        final var response = createSessionResponse();
+
+        when(sessionService.findById(anyLong()))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                get("/sessions/{sessionId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk(),
+                content().json(objectMapper.writeValueAsString(response))
+        ).andDo(
+                document(
+                        "sessions/find-by-id",
+                        responseFields(
+                                fieldWithPath("id").description("세션 ID"),
+                                fieldWithPath("title").description("세션 이름"),
+                                fieldWithPath("startDate").description("세션 시작 시간"),
+                                fieldWithPath("endDate").description("세션 종료 시간")
+                        )
+                )
+        );
+    }
 
     @DisplayName("내 상태를 조회한다.")
     @Test
@@ -101,6 +129,15 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                                 fieldWithPath("rank[].reactions[].miss").description("놓침 여부")
                         )
                 )
+        );
+    }
+
+    private SessionResponse createSessionResponse() {
+        return new SessionResponse(
+                1L,
+                "세션(" + Randoms.generateAlphanumeric(5) + ")",
+                baseTime,
+                baseTime.plusMinutes(5)
         );
     }
 
