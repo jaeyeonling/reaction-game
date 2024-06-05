@@ -1,3 +1,11 @@
+### Get Session
+< {%
+    request.variables.set("sessionId", "1")
+%}
+GET {{host}}/sessions/{{sessionId}} HTTP/1.1
+Content-Type: application/json
+X-PLAYER-TOKEN: {{x-player-token}}
+
 ### Reaction
 POST {{host}}/sessions/{{session-id}}/reactions HTTP/1.1
 Content-Type: application/json

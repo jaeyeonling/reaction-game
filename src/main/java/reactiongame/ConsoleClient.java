@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
+import reactiongame.application.SessionResponse;
 import reactiongame.application.SessionResultResponse;
 import reactiongame.application.SessionStatusResponse;
 import reactiongame.domain.ReactionHistory;
@@ -39,6 +40,9 @@ public class ConsoleClient implements AutoCloseable {
             final Scanner scanner,
             final ConsoleClient client
     ) {
+        final var session = client.findSession();
+        System.out.println("해당 게임은 " + session.startDate() + "부터 " + session.endDate() + "까지 진행됩니다.");
+
         while (true) {
             System.out.println("1. React");
             System.out.println("2. List reactions");
@@ -108,6 +112,14 @@ public class ConsoleClient implements AutoCloseable {
             return toEntity(response.body(), SessionStatusResponse.class);
         }
         throw new RuntimeException("Failed to get my status: " + response.body());
+    }
+
+    public SessionResponse findSession() {
+        final var response = request("/" + SESSION_ID, "GET");
+        if (response.statusCode() == HttpStatus.OK.value()) {
+            return toEntity(response.body(), SessionResponse.class);
+        }
+        throw new RuntimeException("Failed to get session: " + response.body());
     }
 
     public SessionResultResponse result() {
