@@ -4,7 +4,7 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'com.epages.restdocs-api-spec' version '0.19.2'
 }
 
 group = 'jaeyeonling'
@@ -13,8 +13,6 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-
-    asciidoctorExtensions
 }
 
 repositories {
@@ -23,7 +21,6 @@ repositories {
 
 ext {
     set('javaVersion', JavaVersion.VERSION_21)
-    set('snippetsDir', file('build/generated-snippets'))
 }
 
 java {
@@ -47,7 +44,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.2'
 }
 
 springBoot {
@@ -58,15 +55,20 @@ test {
     useJUnitPlatform()
 }
 
-asciidoctor {
-    configurations 'asciidoctorExtensions'
-    dependsOn test
-    baseDirFollowsSourceFile()
+openapi3 {
+    servers = [
+            { url = 'http://localhost:8080' },
+            { url = 'http://15.164.245.42:8080' }
+    ]
+    title = 'Reaction Game API'
+    description = 'API for Reaction Game'
+    version = '0.1.0'
+    format = 'yaml'
 }
 
 bootJar {
-    dependsOn asciidoctor
-    from(asciidoctor.outputDir) {
+    dependsOn 'openapi3'
+    from('build/api-spec/openapi3.yaml') {
         into 'static/docs'
     }
 }

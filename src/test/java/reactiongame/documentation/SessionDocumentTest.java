@@ -21,13 +21,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,6 +56,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "sessions/find-by-id",
+                        "세션을 조회한다.",
                         responseFields(
                                 fieldWithPath("id").description("세션 ID"),
                                 fieldWithPath("title").description("세션 이름"),
@@ -84,6 +85,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "sessions/my-status",
+                        "내 상태를 조회한다.",
                         responseFields(
                                 fieldWithPath("playerName").description("플레이어 이름"),
                                 fieldWithPath("reactions").description("반응 목록"),
@@ -114,6 +116,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "sessions/result",
+                        "결과를 조회한다.",
                         responseFields(
                                 fieldWithPath("title").description("세션 이름"),
                                 fieldWithPath("startDate").description("세션 시작 시간"),

@@ -14,10 +14,10 @@ import reactiongame.support.LocalDateTimes;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -51,6 +51,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "reactions/create",
+                        "요청 시간 기준으로 반응을 기록한다.",
                         responseFields(
                                 fieldWithPath("reactionTime").description("반응 시간"),
                                 fieldWithPath("reactionBaseTime").description("반응 기준 시간"),
@@ -83,6 +84,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "reactions/list",
+                        "반응 목록을 조회한다.",
                         responseFields(
                                 fieldWithPath("[].reactionTime").description("반응 시간"),
                                 fieldWithPath("[].reactionBaseTime").description("반응 기준 시간"),
@@ -115,6 +117,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "reactions/mine",
+                        "내 반응 목록을 조회한다.",
                         responseFields(
                                 fieldWithPath("[].reactionTime").description("반응 시간"),
                                 fieldWithPath("[].reactionBaseTime").description("반응 기준 시간"),
