@@ -7,7 +7,7 @@ public record SessionResultResponse(
         String title,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        List<ScoreItemResponse> rank
+        List<SessionPlayerRankingResponse> rank
 ) {
 
 }

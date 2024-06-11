@@ -4,7 +4,7 @@ import reactiongame.domain.ReactionHistory;
 
 import java.util.List;
 
-public record ScoreItemResponse(
+public record SessionPlayerRankingResponse(
         String playerName,
         Integer rank,
         long totalReactionRateMillis,

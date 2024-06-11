@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import reactiongame.application.ScoreItemResponse;
+import reactiongame.application.SessionPlayerRankingResponse;
 import reactiongame.application.SessionPlayerStatusResponse;
 import reactiongame.application.SessionResponse;
 import reactiongame.application.SessionResultResponse;
@@ -142,10 +142,6 @@ final class SessionDocumentTest extends AbstractDocumentTest {
     }
 
     private SessionResultResponse createResultResponse() {
-        return createResultResponse(baseTime);
-    }
-
-    private SessionResultResponse createResultResponse(final LocalDateTime base) {
         final var players = Stream.generate(this::createPlayerStatusResponse)
                 .limit(5)
                 .sorted((a, b) -> {
@@ -161,7 +157,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                 .toList();
         final var scoreItemResponses = Streams.mapWithIndex(
                 players.stream(),
-                (index, player) -> new ScoreItemResponse(
+                (index, player) -> new SessionPlayerRankingResponse(
                         player.playerName(),
                         (int) index + 1,
                         player.reactions().stream()
@@ -173,8 +169,8 @@ final class SessionDocumentTest extends AbstractDocumentTest {
 
         return new SessionResultResponse(
                 "세션(" + Randoms.generateAlphanumeric(5) + ")",
-                base,
-                base.plusMinutes(5),
+                baseTime,
+                baseTime.plusMinutes(5),
                 scoreItemResponses
         );
     }

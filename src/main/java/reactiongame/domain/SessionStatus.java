@@ -18,7 +18,12 @@ public record SessionStatus(
                 .sorted((Comparator.comparingLong(SessionPlayerStatus::totalReactionRateMillis)));
         return Streams.mapWithIndex(
                 sortedPlayerByRank,
-                (index, playerStatus) -> new SessionPlayerRanking((int) index + 1, playerStatus.playerId())
+                (index, playerStatus) -> new SessionPlayerRanking(
+                        (int) index + 1,
+                        playerStatus.playerId(),
+                        playerStatus.totalReactionRateMillis(),
+                        playerStatus.reactions()
+                )
         ).collect(collectingAndThen(
                 toList(),
                 playerRankings -> new SessionResult(sessionId, playerRankings)
