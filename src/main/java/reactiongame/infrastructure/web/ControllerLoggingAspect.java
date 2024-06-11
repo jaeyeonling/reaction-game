@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -44,25 +46,23 @@ public final class ControllerLoggingAspect {
 
         @SuppressWarnings("CodeBlock2Expr") final Consumer<HttpServletRequest> httpServletRequestLogger = request -> {
             log.debug(
-                    "exception [time={}, url={}, httpMethod={}, ip={}, class={}, method={}, hashcode={}, cause={}, exceptionMessage={}]",
+                    "exception [time={}, url={}, httpMethod={}, ip={}, class={}, method={}, cause={}, exceptionMessage={}]",
                     LocalDateTime.now(),
                     request.getRequestURL(),
                     request.getMethod(),
                     IpExtractor.extract(request),
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
-                    Thread.currentThread().hashCode(),
                     e.getCause() == null ? "NULL" : e.getCause(),
                     e.getMessage()
             );
         };
         @SuppressWarnings("CodeBlock2Expr") final Runnable requestNotFoundLogger = () -> {
             log.debug(
-                    "exception [time={}, class={}, method={}, hashcode={}, cause={}, exceptionMessage={}]",
+                    "exception [time={}, class={}, method={}, cause={}, exceptionMessage={}]",
                     LocalDateTime.now(),
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
-                    Thread.currentThread().hashCode(),
                     e.getCause() == null ? "NULL" : e.getCause(),
                     e.getMessage()
             );
@@ -94,25 +94,23 @@ public final class ControllerLoggingAspect {
 
         @SuppressWarnings("CodeBlock2Expr") final Consumer<HttpServletRequest> httpServletRequestLogger = request -> {
             log.debug(
-                    "return [time={}, url={}, httpMethod={}, ip={}, class={}, method={}, hashcode={}, result={}, elapsedMillis={}]",
+                    "return [time={}, url={}, httpMethod={}, ip={}, class={}, method={}, result={}, elapsedMillis={}]",
                     LocalDateTime.now(),
                     request.getRequestURL(),
                     request.getMethod(),
                     IpExtractor.extract(request),
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
-                    Thread.currentThread().hashCode(),
                     result,
                     elapsedMillis
             );
         };
         @SuppressWarnings("CodeBlock2Expr") final Runnable requestNotFoundLogger = () -> {
             log.debug(
-                    "return [time={}, class={}, method={}, hashcode={}, result={}, elapsedMillis={}]",
+                    "return [time={}, class={}, method={}, result={}, elapsedMillis={}]",
                     LocalDateTime.now(),
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
-                    Thread.currentThread().hashCode(),
                     result,
                     elapsedMillis
             );
@@ -125,24 +123,22 @@ public final class ControllerLoggingAspect {
     private void loggingEnter(ProceedingJoinPoint joinPoint, Logger log) {
         @SuppressWarnings("CodeBlock2Expr") final Consumer<HttpServletRequest> httpServletRequestLogger = request -> {
             log.debug(
-                    "enter [time={}, url={}, httpMethod={}, ip={}, class={}, method={}, hashcode={}, arguments={}]",
+                    "enter [time={}, url={}, httpMethod={}, ip={}, class={}, method={}, arguments={}]",
                     LocalDateTime.now(),
                     request.getRequestURL(),
                     request.getMethod(),
                     IpExtractor.extract(request),
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
-                    Thread.currentThread().hashCode(),
                     Arrays.toString(joinPoint.getArgs())
             );
         };
         @SuppressWarnings("CodeBlock2Expr") final Runnable requestNotFoundLogger = () -> {
             log.debug(
-                    "enter [time={}, class={}, method={}, hashcode={}, arguments={}]",
+                    "enter [time={}, class={}, method={}, arguments={}]",
                     LocalDateTime.now(),
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
-                    Thread.currentThread().hashCode(),
                     Arrays.toString(joinPoint.getArgs())
             );
         };
