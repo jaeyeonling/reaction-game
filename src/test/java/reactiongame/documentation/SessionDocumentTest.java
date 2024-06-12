@@ -86,6 +86,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                 document(
                         "sessions/my-status",
                         "내 상태를 조회한다.",
+                        authHeaders(),
                         responseFields(
                                 fieldWithPath("playerName").description("플레이어 이름"),
                                 fieldWithPath("reactions").description("반응 목록"),
@@ -117,6 +118,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                 document(
                         "sessions/result",
                         "결과를 조회한다.",
+                        authHeaders(),
                         responseFields(
                                 fieldWithPath("title").description("세션 이름"),
                                 fieldWithPath("startDate").description("세션 시작 시간"),

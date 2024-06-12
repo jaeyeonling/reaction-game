@@ -52,6 +52,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
                 document(
                         "reactions/create",
                         "요청 시간 기준으로 반응을 기록한다.",
+                        authHeaders(),
                         responseFields(
                                 fieldWithPath("reactionTime").description("반응 시간"),
                                 fieldWithPath("reactionBaseTime").description("반응 기준 시간"),
@@ -85,6 +86,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
                 document(
                         "reactions/list",
                         "반응 목록을 조회한다.",
+                        authHeaders(),
                         responseFields(
                                 fieldWithPath("[].reactionTime").description("반응 시간"),
                                 fieldWithPath("[].reactionBaseTime").description("반응 기준 시간"),
@@ -118,6 +120,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
                 document(
                         "reactions/mine",
                         "내 반응 목록을 조회한다.",
+                        authHeaders(),
                         responseFields(
                                 fieldWithPath("[].reactionTime").description("반응 시간"),
                                 fieldWithPath("[].reactionBaseTime").description("반응 기준 시간"),

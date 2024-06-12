@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +21,8 @@ import reactiongame.infrastructure.security.PlayerTokenBaseSecureInterceptor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 @AutoConfigureRestDocs
@@ -60,5 +63,9 @@ public abstract class AbstractDocumentTest {
                 .thenReturn(true);
         when(playerTokenBaseAccessTokenBindInterceptor.preHandle(any(), any(), any()))
                 .thenReturn(true);
+    }
+
+    public RequestHeadersSnippet authHeaders() {
+        return requestHeaders(headerWithName("X-Player-Token").description("플레이어 토큰"));
     }
 }
