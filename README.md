@@ -42,3 +42,118 @@
 3. 게임에 참여하는 클라이언트는 반드시 관리자로 부터 발급받은 토큰과 SessionId를 이용하여 요청을 보내야 합니다.
 4. 서버에 문제가 될 수 있을 정도의 요청을 보내는 것은 금지됩니다.
 5. 만약 서버에 요청하지 않았다면 최대 시간인 30초로 처리됩니다.
+
+## 플레이 시나리오
+
+#### 가장 기본적인 플레이 예시
+
+```mermaid
+sequenceDiagram
+    participant 브리
+    box 초록스터디
+    participant 브라우니
+    participant 브라운 as 스터디 대표 브라운
+    end
+    box Server (게임시간: 12:00:00~12:05:00)
+    participant Server
+    end
+    participant 네오
+
+    note over 브리,네오: 11:59:00
+    
+    브리->>Server: [11:59:29] POST /sessions/{sessionId}/reactions
+    Server--x브리: 아직 플레이 시간 전임 (12:00:00 이후 요청 가능)
+
+    alt 플레이 시간 (12:00:00~12:05:00)
+
+        브리->>Server: [11:59:59] POST /sessions/{sessionId}/reactions
+        Server-->>브리: 아직 플레이 시간 전임 (12:00:00 이후 요청 가능)
+
+        note over 브리,네오: 12:00:00
+        
+        네오->>Server: [12:00:00.456] POST /sessions/{sessionId}/reactions
+        Server-->>네오: 456ms 걸림
+        네오->>Server: [12:00:02] POST /sessions/{sessionId}/reactions
+        Server--x네오: 이미 기록 됐음
+
+        브리->>Server: [12:00:01] POST /sessions/{sessionId}/reactions
+        Server-->>브리: 1000ms 걸림
+
+        브라운->>Server: [12:00:29.123] POST /sessions/{sessionId}/reactions
+        Server-->>브라운: 29123ms 걸림
+
+        네오->>Server: [12:00:59.999] POST /sessions/{sessionId}/reactions
+        Server-->>네오: 1ms 걸림
+
+        note over 브리,네오: 12:01:00
+
+        note over 브리,네오: 12:02:00
+
+        note over 브리,네오: 12:03:00
+
+        note over 브리,네오: 12:04:00
+
+        네오->>Server: [12:04:04.123] POST /sessions/{sessionId}/reactions
+        Server-->>네오: 4123ms 걸림
+
+        브리->>Server: [12:04:31] POST /sessions/{sessionId}/reactions
+        Server-->>브리: 플레이 시간 끝남 (12:04:30 이후 요청 불가)
+
+        note over 브리,네오: 12:05:00
+    end
+
+    note over 브리,네오: 12:06:00
+```
+
+#### 개선한 플레이 예시
+
+```mermaid
+sequenceDiagram
+    participant 네오
+    box Server
+    participant Server
+    end
+
+    네오->>Server: [11:50:00] GET /sessions/{sessionId}
+    Server-->>네오: 플레이 시간 12:00:00~12:05:00
+
+    note over 네오,Server: 11:59:00
+
+    loop if (now() > 12:00:00)
+
+        note over 네오,Server: 12:00:00
+        
+        네오->>Server: [12:00:00.123] POST /sessions/{sessionId}/reactions
+        Server-->>네오: 123ms 걸림
+
+        note over 네오: 이전 응답 기준으로 최적화
+
+        note over 네오,Server: 12:01:00
+
+        네오->>Server: [12:01:00.078] POST /sessions/{sessionId}/reactions
+        Server-->>네오: 78ms 걸림
+
+        note over 네오: 이전 응답 기준으로 최적화
+
+        네오->>Server: [12:01:59.988] POST /sessions/{sessionId}/reactions
+        Server-->>네오: 12ms 걸림
+
+        네오->>Server: [12:01:59.988] GET /sessions/{sessionId}/reactions
+        Server-->>네오: 다른 플레이어 응답 기록들 응답
+
+        note over 네오: 다른 플레이어들 기록과 비교하여 최적화
+
+        note over 네오,Server: 12:02:00
+
+        note over 네오,Server: 12:03:00
+
+        note over 네오,Server: 12:04:00
+
+        note over 네오,Server: 12:05:00
+    end
+    
+    네오->>Server: [12:01:59.988] GET /sessions/{sessionId}/reactions
+     Server-->>네오: 랭킹 응답
+
+    note over 네오,Server: 12:06:00
+```

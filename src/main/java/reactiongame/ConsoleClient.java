@@ -44,31 +44,23 @@ public class ConsoleClient implements AutoCloseable {
         System.out.println("해당 게임은 " + session.startDate() + "부터 " + session.endDate() + "까지 진행됩니다.");
 
         while (true) {
-            System.out.println("1. React");
-            System.out.println("2. List reactions");
-            System.out.println("3. My reactions");
-            System.out.println("4. My status");
-            System.out.println("5. Result");
-            System.out.println("6. Exit");
+             System.out.println("""
+                    1. React
+                    2. List reactions
+                    3. My reactions
+                    4. My status
+                    5. Result
+                    6. Exit
+                    """);
 
             try {
                 final var command = scanner.nextLine();
                 switch (command) {
-                    case "1" -> {
-                        System.out.println(client.react());
-                    }
-                    case "2" -> {
-                        System.out.println(client.listReactions());
-                    }
-                    case "3" -> {
-                        System.out.println(client.myReactions());
-                    }
-                    case "4" -> {
-                        System.out.println(client.myStatus());
-                    }
-                    case "5" -> {
-                        System.out.println(client.result());
-                    }
+                    case "1" -> System.out.println(client.react());
+                    case "2" -> System.out.println(client.listReactions());
+                    case "3" -> System.out.println(client.myReactions());
+                    case "4" -> System.out.println(client.myStatus());
+                    case "5" -> System.out.println(client.result());
                     case "6" -> {
                         System.out.println("Exit client");
                         return;
