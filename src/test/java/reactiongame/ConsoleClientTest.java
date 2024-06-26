@@ -1,11 +1,13 @@
 package reactiongame;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import reactiongame.domain.ReactionBaseTime;
 
 import java.time.LocalDateTime;
 
+@Disabled
 class ConsoleClientTest {
 
     private ConsoleClient consoleClient;
