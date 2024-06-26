@@ -129,12 +129,12 @@ sequenceDiagram
         네오->>Server: [12:01:59.988] POST /sessions/{sessionId}/reactions
         Server-->>네오: 12ms 걸림
 
-        네오->>Server: [12:01:59.988] GET /sessions/{sessionId}/reactions
+        note over 네오,Server: 12:02:00
+
+        네오->>Server: [12:02:01.988] GET /sessions/{sessionId}/reactions
         Server-->>네오: 다른 플레이어 응답 기록들 응답
 
         note over 네오: 다른 플레이어들 기록과 비교하여 최적화
-
-        note over 네오,Server: 12:02:00
 
         note over 네오,Server: 12:03:00
 
@@ -143,8 +143,6 @@ sequenceDiagram
         note over 네오,Server: 12:05:00
     end
     
-    네오->>Server: [12:01:59.988] GET /sessions/{sessionId}/reactions
-     Server-->>네오: 랭킹 응답
-
-    note over 네오,Server: 12:06:00
+    네오->>Server: [12:06:01.988] GET /sessions/{sessionId}/reactions
+    Server-->>네오: 랭킹 응답
 ```
