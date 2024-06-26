@@ -3,6 +3,7 @@ package reactiongame;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpStatus;
 import reactiongame.application.SessionResponse;
 import reactiongame.application.SessionResultResponse;
@@ -25,12 +26,37 @@ public class ConsoleClient implements AutoCloseable {
 
     private final HttpClient httpClient = HttpClient.newBuilder().build();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+
+    private final String host;
+
+    private final int sessionId;
+
+    private final String xPlayerToken;
+
+    public ConsoleClient() {
+        this(HOST, SESSION_ID, X_PLAYER_TOKEN);
+    }
+
+    public ConsoleClient(
+            final String host,
+            final int sessionId,
+            final String xPlayerToken
+    ) {
+        this.host = host;
+        this.sessionId = sessionId;
+        this.xPlayerToken = xPlayerToken;
+    }
 
     public static void main(final String... args) {
+        final var host = args.length > 0 ? args[0] : HOST;
+        final var sessionId = args.length > 1 ? Integer.parseInt(args[1]) : SESSION_ID;
+        final var xPlayerToken = args.length > 2 ? args[2] : X_PLAYER_TOKEN;
+
         try (
                 final var scanner = new Scanner(System.in);
-                final var client = new ConsoleClient()
+                final var client = new ConsoleClient(host, sessionId, xPlayerToken)
         ) {
             run(scanner, client);
         }
@@ -44,7 +70,7 @@ public class ConsoleClient implements AutoCloseable {
         System.out.println("해당 게임은 " + session.startDate() + "부터 " + session.endDate() + "까지 진행됩니다.");
 
         while (true) {
-             System.out.println("""
+            System.out.println("""
                     1. React
                     2. List reactions
                     3. My reactions
@@ -74,7 +100,7 @@ public class ConsoleClient implements AutoCloseable {
     }
 
     public ReactionHistory react() {
-        final var response = request("reactions", "POST");
+        final var response = request("/reactions", "POST");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntity(response.body(), ReactionHistory.class);
         }
@@ -83,7 +109,7 @@ public class ConsoleClient implements AutoCloseable {
 
 
     public List<ReactionHistory> listReactions() {
-        final var response = request("reactions", "GET");
+        final var response = request("/reactions", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntities(response.body());
         }
@@ -91,7 +117,7 @@ public class ConsoleClient implements AutoCloseable {
     }
 
     public List<ReactionHistory> myReactions() {
-        final var response = request("reactions/mine", "GET");
+        final var response = request("/reactions/mine", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntities(response.body());
         }
@@ -99,7 +125,7 @@ public class ConsoleClient implements AutoCloseable {
     }
 
     public SessionStatusResponse myStatus() {
-        final var response = request("my-status", "GET");
+        final var response = request("/my-status", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntity(response.body(), SessionStatusResponse.class);
         }
@@ -107,7 +133,7 @@ public class ConsoleClient implements AutoCloseable {
     }
 
     public SessionResponse findSession() {
-        final var response = request("/" + SESSION_ID, "GET");
+        final var response = request("", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntity(response.body(), SessionResponse.class);
         }
@@ -115,7 +141,7 @@ public class ConsoleClient implements AutoCloseable {
     }
 
     public SessionResultResponse result() {
-        final var response = request("result", "GET");
+        final var response = request("/result", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntity(response.body(), SessionResultResponse.class);
         }
@@ -128,8 +154,8 @@ public class ConsoleClient implements AutoCloseable {
     ) {
         final var request = HttpRequest.newBuilder()
                 .header("Content-Type", "application/json")
-                .header("X-Player-Token", X_PLAYER_TOKEN)
-                .uri(URI.create(HOST + "/sessions/" + SESSION_ID + "/" + path))
+                .header("X-Player-Token", xPlayerToken)
+                .uri(URI.create(host + "/sessions/" + sessionId + path))
                 .method(method, HttpRequest.BodyPublishers.noBody())
                 .build();
 
