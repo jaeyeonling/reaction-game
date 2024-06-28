@@ -94,17 +94,6 @@ public final class SessionAcceptanceTest extends AbstractAcceptanceTest {
                 .all();
     }
 
-    @DisplayName("세션 결과를 조회한다.")
-    @Test
-    void some1() {
-    }
-
-    @DisplayName("세션 랭킹을 조회한다.")
-    @Test
-    void some2() {
-
-    }
-
     public static SessionRequest createSessionRequest() {
         return createSessionRequest(
                 "세션(" + Randoms.generateAlphanumeric(5) + ")",

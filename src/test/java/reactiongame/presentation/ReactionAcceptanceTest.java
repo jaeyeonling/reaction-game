@@ -58,29 +58,6 @@ public final class ReactionAcceptanceTest extends AbstractAcceptanceTest {
                 .all();
     }
 
-    @DisplayName("내 반응 목록을 조회한다.")
-    @Test
-    void findMine() {
-        final var player = givenPlayer();
-        final var session = givenSession();
-        final var myReaction = givenReaction(session.id(), player.token());
-        final var otherReactions = Stream.generate(() -> givenReaction(session.id()))
-                .limit(5)
-                .toList();
-
-        withPlayerToken(player.token())
-                .when()
-                .get("/sessions/{sessionId}/reactions/mine", session.id())
-
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .body("size()", equalTo(1))
-                .body("reactionBaseTime", hasItem(startsWith(myReaction.reactionBaseTime().toString())))
-                .log()
-                .all();
-    }
-
     public static ReactionHistory givenReaction(final long sessionId) {
         return givenReaction(sessionId, givenPlayer().token());
     }

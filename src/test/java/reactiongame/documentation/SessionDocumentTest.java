@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import reactiongame.application.SessionLeaderboardResponse;
 import reactiongame.application.SessionPlayerRankingResponse;
 import reactiongame.application.SessionPlayerStatusResponse;
 import reactiongame.application.SessionResponse;
-import reactiongame.application.SessionLeaderboardResponse;
 import reactiongame.application.SessionService;
 import reactiongame.domain.Reaction;
 import reactiongame.domain.ReactionHistory;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -62,38 +61,6 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                                 fieldWithPath("title").description("세션 이름"),
                                 fieldWithPath("startDate").description("세션 시작 시간"),
                                 fieldWithPath("endDate").description("세션 종료 시간")
-                        )
-                )
-        );
-    }
-
-    @DisplayName("내 상태를 조회한다.")
-    @Test
-    void myStatus() throws Exception {
-        final var response = createPlayerStatusResponse();
-
-        when(sessionService.findPlayerStatus(any(), anyLong()))
-                .thenReturn(response);
-
-        mockMvc.perform(
-                get("/sessions/{sessionId}/my-status", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Player-Token", "{PLAYER TOKEN}")
-        ).andExpectAll(
-                status().isOk(),
-                content().json(objectMapper.writeValueAsString(response))
-        ).andDo(
-                document(
-                        "sessions/my-status",
-                        "내 상태를 조회한다.",
-                        authHeaders(),
-                        responseFields(
-                                fieldWithPath("playerName").description("플레이어 이름"),
-                                fieldWithPath("reactions").description("반응 목록"),
-                                fieldWithPath("reactions[].reactionTime").description("반응 시간").optional(),
-                                fieldWithPath("reactions[].reactionBaseTime").description("반응 기준 시간"),
-                                fieldWithPath("reactions[].reactionRateMillis").description("반응 시간(밀리초)"),
-                                fieldWithPath("reactions[].miss").description("놓침 여부")
                         )
                 )
         );

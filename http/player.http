@@ -16,17 +16,7 @@ GET {{host}}/sessions/{{session-id}}/reactions HTTP/1.1
 Content-Type: application/json
 X-PLAYER-TOKEN: {{x-player-token}}
 
-### Get My Reactions
-GET {{host}}/sessions/{{session-id}}/reactions/mine HTTP/1.1
-Content-Type: application/json
-X-PLAYER-TOKEN: {{x-player-token}}
-
-### Get My Status
-GET {{host}}/sessions/{{session-id}}/my-status HTTP/1.1
-Content-Type: application/json
-X-PLAYER-TOKEN: {{x-player-token}}
-
-### Get Result
+### Get Leaderboards
 GET {{host}}/sessions/{{session-id}}/leaderboards HTTP/1.1
 Content-Type: application/json
 X-PLAYER-TOKEN: {{x-player-token}}

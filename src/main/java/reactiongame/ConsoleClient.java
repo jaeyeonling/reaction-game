@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpStatus;
-import reactiongame.application.SessionResponse;
 import reactiongame.application.SessionLeaderboardResponse;
+import reactiongame.application.SessionResponse;
 import reactiongame.application.SessionStatusResponse;
 import reactiongame.domain.ReactionHistory;
 

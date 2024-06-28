@@ -34,13 +34,4 @@ public class ReactionController {
     List<ReactionHistory> findAll(@PathVariable final long sessionId) {
         return reactionService.findBySessionId(sessionId);
     }
-
-    @Secured
-    @GetMapping("/sessions/{sessionId}/reactions/mine")
-    List<ReactionHistory> findMine(
-            @BindAccessToken final AccessToken accessToken,
-            @PathVariable final long sessionId
-    ) {
-        return reactionService.findBy(accessToken, sessionId);
-    }
 }

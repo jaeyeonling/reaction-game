@@ -97,40 +97,6 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
         );
     }
 
-    @DisplayName("내 반응 목록을 조회한다.")
-    @Test
-    void findMine() throws Exception {
-        final var responses = List.of(
-                createResponse(baseTime.minusMinutes(1).minusSeconds(23).minusNanos(LocalDateTimes.convertMillisToNano(456))),
-                createResponse(baseTime.plusNanos(LocalDateTimes.convertMillisToNano(789))),
-                createResponse(baseTime.plusMinutes(2).plusSeconds(3).plusNanos(LocalDateTimes.convertMillisToNano(45)))
-        );
-
-        when(reactionService.findBy(any(), anyLong()))
-                .thenReturn(responses);
-
-        mockMvc.perform(
-                get("/sessions/{sessionId}/reactions/mine", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Player-Token", "{PLAYER TOKEN}")
-        ).andExpectAll(
-                status().isOk(),
-                content().json(objectMapper.writeValueAsString(responses))
-        ).andDo(
-                document(
-                        "reactions/mine",
-                        "내 반응 목록을 조회한다.",
-                        authHeaders(),
-                        responseFields(
-                                fieldWithPath("[].reactionTime").description("반응 시간"),
-                                fieldWithPath("[].reactionBaseTime").description("반응 기준 시간"),
-                                fieldWithPath("[].reactionRateMillis").description("반응 시간(밀리초)"),
-                                fieldWithPath("[].miss").description("놓침 여부")
-                        )
-                )
-        );
-    }
-
     private ReactionHistory createResponse(final LocalDateTime reactionTime) {
         return new ReactionHistory(new Reaction(reactionTime));
     }
