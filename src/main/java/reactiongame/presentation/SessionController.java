@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactiongame.application.SessionPlayerStatusResponse;
 import reactiongame.application.SessionRequest;
 import reactiongame.application.SessionResponse;
-import reactiongame.application.SessionResultResponse;
+import reactiongame.application.SessionLeaderboardResponse;
 import reactiongame.application.SessionService;
 import reactiongame.application.SessionStatusResponse;
 import reactiongame.infrastructure.security.AccessToken;
@@ -76,8 +76,8 @@ public class SessionController {
     }
 
     @Secured
-    @GetMapping("/sessions/{sessionId}/result")
-    SessionResultResponse result(@PathVariable final long sessionId) {
-        return sessionService.findResult(sessionId);
+    @GetMapping("/sessions/{sessionId}/leaderboards")
+    SessionLeaderboardResponse leaderboards(@PathVariable final long sessionId) {
+        return sessionService.createLeaderboard(sessionId);
     }
 }

@@ -58,7 +58,7 @@ public final class SessionAssembler {
         return sessionPlayerStatusAssembler.assemble(sessionPlayerStatus);
     }
 
-    public SessionResultResponse toResponse(final SessionResult sessionResult) {
+    public SessionLeaderboardResponse toResponse(final SessionResult sessionResult) {
         return sessionResultAssembler.assemble(sessionResult);
     }
 }

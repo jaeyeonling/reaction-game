@@ -134,14 +134,14 @@ public class Session extends CreateDateAuditable {
         return sessionPlayerStatusReactions;
     }
 
-    public SessionResult createSessionResult(final List<SessionPlayer> sessionPlayers) {
-        return createSessionResult(
+    public SessionResult createLeaderboard(final List<SessionPlayer> sessionPlayers) {
+        return createLeaderboard(
                 sessionPlayers,
                 LocalDateTime.now()
         );
     }
 
-    public SessionResult createSessionResult(
+    public SessionResult createLeaderboard(
             final List<SessionPlayer> sessionPlayers,
             final LocalDateTime requestAt
     ) {

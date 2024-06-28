@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import reactiongame.application.SessionPlayerRankingResponse;
 import reactiongame.application.SessionPlayerStatusResponse;
 import reactiongame.application.SessionResponse;
-import reactiongame.application.SessionResultResponse;
+import reactiongame.application.SessionLeaderboardResponse;
 import reactiongame.application.SessionService;
 import reactiongame.domain.Reaction;
 import reactiongame.domain.ReactionHistory;
@@ -99,16 +99,16 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         );
     }
 
-    @DisplayName("결과를 조회한다.")
+    @DisplayName("랭킹 결과를 조회한다.")
     @Test
-    void result() throws Exception {
+    void leaderboard() throws Exception {
         final var response = createResultResponse();
 
-        when(sessionService.findResult(anyLong()))
+        when(sessionService.createLeaderboard(anyLong()))
                 .thenReturn(response);
 
         mockMvc.perform(
-                get("/sessions/{sessionId}/result", 1)
+                get("/sessions/{sessionId}/leaderboards", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Player-Token", "{PLAYER TOKEN}")
         ).andExpectAll(
@@ -116,8 +116,8 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                 content().json(objectMapper.writeValueAsString(response))
         ).andDo(
                 document(
-                        "sessions/result",
-                        "결과를 조회한다.",
+                        "sessions/leaderboard",
+                        "랭킹 결과를 조회한다.",
                         authHeaders(),
                         responseFields(
                                 fieldWithPath("title").description("세션 이름"),
@@ -146,7 +146,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         );
     }
 
-    private SessionResultResponse createResultResponse() {
+    private SessionLeaderboardResponse createResultResponse() {
         final var players = Stream.generate(this::createPlayerStatusResponse)
                 .limit(5)
                 .sorted((a, b) -> {
@@ -172,7 +172,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
                 )
         ).toList();
 
-        return new SessionResultResponse(
+        return new SessionLeaderboardResponse(
                 "세션(" + Randoms.generateAlphanumeric(5) + ")",
                 baseTime,
                 baseTime.plusMinutes(5),

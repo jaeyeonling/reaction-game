@@ -118,8 +118,8 @@ class SessionTest {
 
     @DisplayName("게임이 끝나지 않은 경우 결과를 생성할 수 없다.")
     @Test
-    void createSessionResult_notFinished() {
-        final var reactionGameException = catchThrowableOfType(() -> session.createSessionResult(
+    void createLeaderboard_notFinished() {
+        final var reactionGameException = catchThrowableOfType(() -> session.createLeaderboard(
                 List.of(),
                 baseTime.minusNanos(1)
         ), ReactionGameException.class);
@@ -131,8 +131,8 @@ class SessionTest {
 
     @DisplayName("게임 정산이 끝나면 결과를 생성할 수 있다.")
     @Test
-    void createSessionResult() {
-        assertThatCode(() -> session.createSessionResult(
+    void createLeaderboard() {
+        assertThatCode(() -> session.createLeaderboard(
                 List.of(),
                 endTime
         )).doesNotThrowAnyException();
@@ -140,8 +140,8 @@ class SessionTest {
 
     @DisplayName("게임 참여자가 없을 때 결과를 생성할 수 있다.")
     @Test
-    void createSessionResult_empty() {
-        final var sessionResult = session.createSessionResult(
+    void createLeaderboard_empty() {
+        final var sessionResult = session.createLeaderboard(
                 List.of(),
                 endTime
         );
@@ -154,14 +154,14 @@ class SessionTest {
 
     @DisplayName("혼자 플레이한 게임의 결과를 생성한다.")
     @Test
-    void createSessionResult_solo() {
+    void createLeaderboard_solo() {
         session.react(sessionPlayer, baseTime); // 0
         session.react(sessionPlayer, baseTime.plusMinutes(1).plusSeconds(3)); // 3000
         // session.react(sessionPlayer, baseTime.plusMinutes(2).plusSeconds(3)); // 누락: 30_000
         session.react(sessionPlayer, baseTime.plusMinutes(3).plusSeconds(3).plusNanos(convertMillisToNano(250))); // 3250
         session.react(sessionPlayer, baseTime.plusMinutes(4).minusSeconds(2).minusNanos(convertMillisToNano(250))); // 2250
 
-        final var sessionResult = session.createSessionResult(
+        final var sessionResult = session.createLeaderboard(
                 List.of(sessionPlayer),
                 endTime
         );
@@ -176,13 +176,13 @@ class SessionTest {
 
     @DisplayName("두 플레이어의 플레이한 게임의 결과를 생성한다.")
     @Test
-    void createSessionResult_duo() {
+    void createLeaderboard_duo() {
         final var winnerPlayer = new SessionPlayer(1L, 2L);
 
         session.react(sessionPlayer, baseTime.plusSeconds(2));
         session.react(winnerPlayer, baseTime.plusSeconds(1));
 
-        final var sessionResult = session.createSessionResult(
+        final var sessionResult = session.createLeaderboard(
                 List.of(winnerPlayer, sessionPlayer),
                 endTime
         );

@@ -26,7 +26,7 @@ public class SessionResultAssembler {
     }
 
     @Transactional(readOnly = true)
-    public SessionResultResponse assemble(final SessionResult sessionResult) {
+    public SessionLeaderboardResponse assemble(final SessionResult sessionResult) {
         final var session = sessionRepository.getById(sessionResult.sessionId());
         final var playerIdToPlayer = playerRepository.findSimpleMapEachById(sessionResult.playerIds());
 
@@ -45,7 +45,7 @@ public class SessionResultAssembler {
                 })
                 .toList();
 
-        return new SessionResultResponse(
+        return new SessionLeaderboardResponse(
                 session.title(),
                 session.startDate(),
                 session.endDate(),

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpStatus;
 import reactiongame.application.SessionResponse;
-import reactiongame.application.SessionResultResponse;
+import reactiongame.application.SessionLeaderboardResponse;
 import reactiongame.application.SessionStatusResponse;
 import reactiongame.domain.ReactionHistory;
 
@@ -140,10 +140,10 @@ public class ConsoleClient implements AutoCloseable {
         throw new RuntimeException("Failed to get session: " + response.body());
     }
 
-    public SessionResultResponse result() {
-        final var response = request("/result", "GET");
+    public SessionLeaderboardResponse result() {
+        final var response = request("/leaderboard", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
-            return toEntity(response.body(), SessionResultResponse.class);
+            return toEntity(response.body(), SessionLeaderboardResponse.class);
         }
         throw new RuntimeException("Failed to get result: " + response.body());
     }

@@ -74,10 +74,10 @@ public class SessionService {
     }
 
     @Transactional(readOnly = true)
-    public SessionResultResponse findResult(final long sessionId) {
+    public SessionLeaderboardResponse createLeaderboard(final long sessionId) {
         final var session = sessionRepository.getById(sessionId);
         final var sessionPlayers = sessionPlayerRepository.findAllBySessionId(sessionId);
 
-        return sessionAssembler.toResponse(session.createSessionResult(sessionPlayers));
+        return sessionAssembler.toResponse(session.createLeaderboard(sessionPlayers));
     }
 }

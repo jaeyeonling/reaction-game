@@ -8,6 +8,6 @@ operation::sessions/find-by-id[snippets='curl-request,http-request,http-response
 
 operation::sessions/my-status[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']
 
-=== 결과 조회
+=== 랭킹 결과 조회
 
-operation::sessions/result[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']
+operation::sessions/leaderboard[snippets='curl-request,http-request,request-body,http-response,response-body,response-fields']
