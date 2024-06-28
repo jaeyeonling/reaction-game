@@ -2,7 +2,6 @@ package reactiongame.application;
 
 import org.springframework.stereotype.Component;
 import reactiongame.domain.Session;
-import reactiongame.domain.SessionPlayerStatus;
 import reactiongame.domain.SessionResult;
 import reactiongame.domain.SessionStatus;
 
@@ -13,17 +12,13 @@ public final class SessionAssembler {
 
     private final SessionStatusAssembler sessionStatusAssembler;
 
-    private final SessionPlayerStatusAssembler sessionPlayerStatusAssembler;
-
     private final SessionResultAssembler sessionResultAssembler;
 
     SessionAssembler(
             final SessionStatusAssembler sessionStatusAssembler,
-            final SessionPlayerStatusAssembler sessionPlayerStatusAssembler,
             final SessionResultAssembler sessionResultAssembler
     ) {
         this.sessionStatusAssembler = sessionStatusAssembler;
-        this.sessionPlayerStatusAssembler = sessionPlayerStatusAssembler;
         this.sessionResultAssembler = sessionResultAssembler;
     }
 

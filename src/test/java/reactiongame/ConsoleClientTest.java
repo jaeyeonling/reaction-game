@@ -49,9 +49,9 @@ class ConsoleClientTest {
             Thread.sleep(1);
         }
 
-        final var result = consoleClient.leaderboard();
+        final var leaderboard = consoleClient.getLeaderboard();
         System.out.println("게임 종료!");
 
-        System.out.println("게임 결과: " + result);
+        System.out.println("게임 결과: " + leaderboard);
     }
 }
