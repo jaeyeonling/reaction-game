@@ -49,7 +49,7 @@ class ConsoleClientTest {
             Thread.sleep(1);
         }
 
-        final var result = consoleClient.result();
+        final var result = consoleClient.leaderboard();
         System.out.println("게임 종료!");
 
         System.out.println("게임 결과: " + result);

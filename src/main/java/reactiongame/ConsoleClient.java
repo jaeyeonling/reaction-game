@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpStatus;
 import reactiongame.application.SessionLeaderboardResponse;
 import reactiongame.application.SessionResponse;
-import reactiongame.application.SessionStatusResponse;
 import reactiongame.domain.ReactionHistory;
 
 import java.io.IOException;
@@ -73,10 +72,8 @@ public class ConsoleClient implements AutoCloseable {
             System.out.println("""
                     1. React
                     2. List reactions
-                    3. My reactions
-                    4. My status
-                    5. Result
-                    6. Exit
+                    3. Leaderboard
+                    4. Exit
                     """);
 
             try {
@@ -84,10 +81,8 @@ public class ConsoleClient implements AutoCloseable {
                 switch (command) {
                     case "1" -> System.out.println(client.react());
                     case "2" -> System.out.println(client.listReactions());
-                    case "3" -> System.out.println(client.myReactions());
-                    case "4" -> System.out.println(client.myStatus());
-                    case "5" -> System.out.println(client.result());
-                    case "6" -> {
+                    case "3" -> System.out.println(client.getLeaderboard());
+                    case "4" -> {
                         System.out.println("Exit client");
                         return;
                     }
@@ -99,6 +94,14 @@ public class ConsoleClient implements AutoCloseable {
         }
     }
 
+    public SessionResponse findSession() {
+        final var response = request("", "GET");
+        if (response.statusCode() == HttpStatus.OK.value()) {
+            return toEntity(response.body(), SessionResponse.class);
+        }
+        throw new RuntimeException("Failed to get session: " + response.body());
+    }
+
     public ReactionHistory react() {
         final var response = request("/reactions", "POST");
         if (response.statusCode() == HttpStatus.OK.value()) {
@@ -106,7 +109,6 @@ public class ConsoleClient implements AutoCloseable {
         }
         throw new RuntimeException("Failed to react: " + response.body());
     }
-
 
     public List<ReactionHistory> listReactions() {
         final var response = request("/reactions", "GET");
@@ -116,32 +118,8 @@ public class ConsoleClient implements AutoCloseable {
         throw new RuntimeException("Failed to list reactions: " + response.body());
     }
 
-    public List<ReactionHistory> myReactions() {
-        final var response = request("/reactions/mine", "GET");
-        if (response.statusCode() == HttpStatus.OK.value()) {
-            return toEntities(response.body());
-        }
-        throw new RuntimeException("Failed to list my reactions: " + response.body());
-    }
-
-    public SessionStatusResponse myStatus() {
-        final var response = request("/my-status", "GET");
-        if (response.statusCode() == HttpStatus.OK.value()) {
-            return toEntity(response.body(), SessionStatusResponse.class);
-        }
-        throw new RuntimeException("Failed to get my status: " + response.body());
-    }
-
-    public SessionResponse findSession() {
-        final var response = request("", "GET");
-        if (response.statusCode() == HttpStatus.OK.value()) {
-            return toEntity(response.body(), SessionResponse.class);
-        }
-        throw new RuntimeException("Failed to get session: " + response.body());
-    }
-
-    public SessionLeaderboardResponse result() {
-        final var response = request("/leaderboard", "GET");
+    public SessionLeaderboardResponse getLeaderboard() {
+        final var response = request("/leaderboards", "GET");
         if (response.statusCode() == HttpStatus.OK.value()) {
             return toEntity(response.body(), SessionLeaderboardResponse.class);
         }

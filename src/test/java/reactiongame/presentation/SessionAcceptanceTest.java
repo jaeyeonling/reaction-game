@@ -61,7 +61,7 @@ public final class SessionAcceptanceTest extends AbstractAcceptanceTest {
                 .all();
     }
 
-    @DisplayName("세션을 조회한다.")
+    @DisplayName("게임 세션 정보를 조회한다.")
     @Test
     void findById() {
         final var session = givenSession();

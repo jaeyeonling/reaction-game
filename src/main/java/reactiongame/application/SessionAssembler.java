@@ -54,10 +54,6 @@ public final class SessionAssembler {
         return sessionStatusAssembler.toResponse(sessionStatus);
     }
 
-    public SessionPlayerStatusResponse toResponse(final SessionPlayerStatus sessionPlayerStatus) {
-        return sessionPlayerStatusAssembler.assemble(sessionPlayerStatus);
-    }
-
     public SessionLeaderboardResponse toResponse(final SessionResult sessionResult) {
         return sessionResultAssembler.assemble(sessionResult);
     }

@@ -6,8 +6,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import reactiongame.infrastructure.web.ReactionGameException;
 import reactiongame.infrastructure.persistence.CreateDateAuditable;
+import reactiongame.infrastructure.web.ReactionGameException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

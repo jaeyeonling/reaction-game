@@ -42,15 +42,6 @@ public class ReactionService {
         return new ReactionHistory(reaction);
     }
 
-    @Transactional
-    public List<ReactionHistory> findBy(
-            final AccessToken accessToken,
-            final long sessionId
-    ) {
-        final var sessionPlayer = sessionPlayerRepository.getBySessionIdAndPlayerId(sessionId, accessToken.playerId());
-        return sessionPlayer.reactions();
-    }
-
     @Transactional(readOnly = true)
     public List<ReactionHistory> findBySessionId(final long sessionId) {
         var sessionPlayers = sessionPlayerRepository.findAllBySessionId(sessionId);

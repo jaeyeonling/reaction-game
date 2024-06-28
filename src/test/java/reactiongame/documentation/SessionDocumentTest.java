@@ -38,7 +38,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
     @MockBean
     private SessionService sessionService;
 
-    @DisplayName("세션을 조회한다.")
+    @DisplayName("게임 세션 정보를 조회한다.")
     @Test
     void findById() throws Exception {
         final var response = createSessionResponse();
@@ -55,7 +55,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "sessions/find-by-id",
-                        "세션을 조회한다.",
+                        "게임 세션 정보를 조회한다.",
                         responseFields(
                                 fieldWithPath("id").description("세션 ID"),
                                 fieldWithPath("title").description("세션 이름"),

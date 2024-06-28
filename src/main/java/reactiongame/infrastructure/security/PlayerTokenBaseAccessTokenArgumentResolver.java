@@ -12,8 +12,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import reactiongame.infrastructure.web.ReactionGameException;
 
 import static java.util.Objects.requireNonNull;
-import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.INVALID_ACCESS_TOKEN;
 import static reactiongame.infrastructure.security.PlayerTokenBaseAccessToken.ACCESS_TOKEN_ATTRIBUTE_NAME;
+import static reactiongame.infrastructure.web.ReactionGameExceptionStatus.INVALID_ACCESS_TOKEN;
 
 @Component
 public final class PlayerTokenBaseAccessTokenArgumentResolver implements HandlerMethodArgumentResolver {

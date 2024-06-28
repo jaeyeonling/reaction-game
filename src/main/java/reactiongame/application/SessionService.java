@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactiongame.domain.SessionPlayerRepository;
 import reactiongame.domain.SessionRepository;
-import reactiongame.infrastructure.security.AccessToken;
 
 import java.util.List;
 
@@ -57,20 +56,6 @@ public class SessionService {
         final var sessionPlayers = sessionPlayerRepository.findAllBySessionId(sessionId);
 
         return sessionAssembler.toResponse(session.createSessionStatus(sessionPlayers));
-    }
-
-    @Transactional(readOnly = true)
-    public SessionPlayerStatusResponse findPlayerStatus(
-            final AccessToken accessToken,
-            final long sessionId
-    ) {
-        final var session = sessionRepository.getById(sessionId);
-        final var sessionPlayer = sessionPlayerRepository.getBySessionIdAndPlayerId(
-                sessionId,
-                accessToken.playerId()
-        );
-
-        return sessionAssembler.toResponse(session.createSessionPlayerStatus(sessionPlayer));
     }
 
     @Transactional(readOnly = true)
