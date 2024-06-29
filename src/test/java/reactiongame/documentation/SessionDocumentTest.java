@@ -55,7 +55,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "sessions/find-by-id",
-                        "게임 세션 정보를 조회한다.",
+                        "게임 세션 정보를 조회한다. startDate와 endDate 시간 사이 매분에 맞춰 반응을 요청하면 된다.",
                         responseFields(
                                 fieldWithPath("id").description("세션 ID"),
                                 fieldWithPath("title").description("세션 이름"),
@@ -84,7 +84,7 @@ final class SessionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "sessions/leaderboard",
-                        "랭킹 결과를 조회한다.",
+                        "랭킹 결과를 조회한다. 랭킹 결과는 게임이 끝난 endDate 이후 확인할 수 있다.",
                         authHeaders(),
                         responseFields(
                                 fieldWithPath("title").description("세션 이름"),

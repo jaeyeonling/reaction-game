@@ -51,7 +51,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "reactions/create",
-                        "요청 시간 기준으로 반응을 기록한다.",
+                        "반응을 기록한다. reactionRateMillis 값으로 오차가 있는지 확인할 수 있고, 해당 정보를 기준으로 최적화 할 수 있다.",
                         authHeaders(),
                         responseFields(
                                 fieldWithPath("reactionTime").description("반응 시간"),
@@ -85,7 +85,7 @@ final class ReactionDocumentTest extends AbstractDocumentTest {
         ).andDo(
                 document(
                         "reactions/list",
-                        "반응 목록을 조회한다.",
+                        "해당 게임의 반응 목록을 조회한다. 누구의 반응인지는 알 수 없지만, 반응 시간 기준으로 다른 플레이어들의 반응과 비교할 수 있다.",
                         authHeaders(),
                         responseFields(
                                 fieldWithPath("[].reactionTime").description("반응 시간"),
